@@ -1,7 +1,9 @@
 package com.example.demo.controller;
 
 import com.example.demo.model.DoctorSettings;
+import com.example.demo.model.Appointment;
 import com.example.demo.repository.DoctorSettingsRepository;
+import com.example.demo.repository.AppointmentRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
@@ -9,21 +11,36 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/settings")
 public class DoctorSettingsController {
 
     private final DoctorSettingsRepository doctorSettingsRepository;
+    private final AppointmentRepository appointmentRepository;
 
-    public DoctorSettingsController(DoctorSettingsRepository doctorSettingsRepository) {
+    public DoctorSettingsController(DoctorSettingsRepository doctorSettingsRepository, AppointmentRepository appointmentRepository) {
         this.doctorSettingsRepository = doctorSettingsRepository;
+        this.appointmentRepository = appointmentRepository;
     }
 
     @GetMapping("/slots")
-    public ResponseEntity<List<String>> getSlots() {
+    public ResponseEntity<List<String>> getSlots(@RequestParam(required = false) String date) {
         DoctorSettings settings = getSettings();
-        return ResponseEntity.ok(settings.getAvailableTimeSlots());
+        List<String> available = settings.getAvailableTimeSlots();
+        
+        if (date != null && !date.isEmpty()) {
+            List<Appointment> booked = appointmentRepository.findByDate(date);
+            List<String> bookedTimes = booked.stream()
+                .map(Appointment::getTime)
+                .collect(Collectors.toList());
+            available = available.stream()
+                .filter(slot -> !bookedTimes.contains(slot))
+                .collect(Collectors.toList());
+        }
+        
+        return ResponseEntity.ok(available);
     }
 
     @PutMapping("/slots")
