@@ -24,16 +24,16 @@ public class DataSeeder implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
-        if (!userRepository.existsByEmail("admin@drloverpreet.com")) {
+        if (!userRepository.existsByEmail("admin@drmadhurana.com")) {
             User admin = new User(
-                    "Dr. Loverpreet Singh",
-                    "admin@drloverpreet.com",
+                    "Prof. Dr. Madhu Lata Rana",
+                    "admin@drmadhurana.com",
                     passwordEncoder.encode("admin1234"),
                     UserRole.ADMIN,
                     AuthProvider.LOCAL
             );
             userRepository.save(admin);
-            log.info("Admin account seeded: admin@drloverpreet.com / admin1234");
+            log.info("Admin account seeded: admin@drmadhurana.com / admin1234");
         } else {
             log.info("Admin account already exists. Skipping seed.");
         }
