@@ -58,7 +58,8 @@ public class AppointmentService {
                 calculatedFee,
                 duration,
                 request.getCurrency() != null ? request.getCurrency() : "INR",
-                region
+                region,
+                request.getClinicLocation() != null ? request.getClinicLocation() : "Dehradun"
         );
 
         Appointment saved = appointmentRepository.save(appointment);

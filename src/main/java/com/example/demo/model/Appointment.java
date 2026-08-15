@@ -44,6 +44,8 @@ public class Appointment {
     
     private String region;
     
+    private String clinicLocation;
+    
     @Column(length = 2000)
     private String notes;
     
@@ -55,7 +57,7 @@ public class Appointment {
 
     public Appointment() {}
 
-    public Appointment(User patient, AppointmentType type, String date, String time, String reason, Integer fee, Integer duration, String currency, String region) {
+    public Appointment(User patient, AppointmentType type, String date, String time, String reason, Integer fee, Integer duration, String currency, String region, String clinicLocation) {
         this.patient = patient;
         this.type = type;
         this.date = date;
@@ -65,6 +67,7 @@ public class Appointment {
         this.duration = duration;
         this.currency = currency;
         this.region = region;
+        this.clinicLocation = clinicLocation;
         this.createdAt = LocalDateTime.now();
     }
 
@@ -103,6 +106,9 @@ public class Appointment {
 
     public String getRegion() { return region; }
     public void setRegion(String region) { this.region = region; }
+
+    public String getClinicLocation() { return clinicLocation; }
+    public void setClinicLocation(String clinicLocation) { this.clinicLocation = clinicLocation; }
 
     public String getNotes() { return notes; }
     public void setNotes(String notes) { this.notes = notes; }

@@ -48,7 +48,7 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
         // Generate JWT
         String token = jwtService.generateToken(user);
 
-        // Redirect to frontend with token
-        response.sendRedirect(frontendUrl + "/login?token=" + token);
+        // Redirect to frontend with token (use the first URL if multiple are provided)
+        response.sendRedirect(frontendUrl.split(",")[0] + "/login?token=" + token);
     }
 }

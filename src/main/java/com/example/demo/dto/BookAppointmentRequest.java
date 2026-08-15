@@ -9,6 +9,7 @@ public class BookAppointmentRequest {
     private Integer duration;
     private String currency;
     private String region;
+    private String clinicLocation;
 
     public BookAppointmentRequest() {}
 
@@ -28,4 +29,6 @@ public class BookAppointmentRequest {
     public void setCurrency(String currency) { this.currency = currency; }
     public String getRegion() { return region; }
     public void setRegion(String region) { this.region = region; }
+    public String getClinicLocation() { return clinicLocation; }
+    public void setClinicLocation(String clinicLocation) { this.clinicLocation = clinicLocation; }
 }
