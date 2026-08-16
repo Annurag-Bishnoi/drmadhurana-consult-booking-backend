@@ -19,6 +19,7 @@ public class AppointmentResponse {
     private String meetingUrl;
     private String notes;
     private String prescription;
+    private String clinicLocation;
 
     public AppointmentResponse() {}
 
@@ -39,6 +40,7 @@ public class AppointmentResponse {
         this.meetingUrl = appointment.getMeetingUrl();
         this.notes = appointment.getNotes();
         this.prescription = appointment.getPrescription();
+        this.clinicLocation = appointment.getClinicLocation();
     }
 
     public Long getId() { return id; }

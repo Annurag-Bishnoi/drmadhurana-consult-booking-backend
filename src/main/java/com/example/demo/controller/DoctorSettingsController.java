@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -26,9 +27,20 @@ public class DoctorSettingsController {
     }
 
     @GetMapping("/slots")
-    public ResponseEntity<List<String>> getSlots(@RequestParam(required = false) String date) {
+    public ResponseEntity<List<String>> getSlots(@RequestParam(required = false) String date, @RequestParam(required = false) String location) {
         DoctorSettings settings = getSettings();
-        List<String> available = settings.getAvailableTimeSlots();
+        List<String> available;
+        
+        if (location != null && !location.trim().isEmpty() && !location.equalsIgnoreCase("Online")) {
+            String locationSlotsStr = settings.getLocationSlots().get(location.trim());
+            if (locationSlotsStr != null && !locationSlotsStr.trim().isEmpty()) {
+                available = Arrays.asList(locationSlotsStr.split(",")).stream().map(String::trim).collect(Collectors.toList());
+            } else {
+                available = new ArrayList<>();
+            }
+        } else {
+            available = settings.getAvailableTimeSlots();
+        }
         
         if (date != null && !date.isEmpty()) {
             List<Appointment> booked = appointmentRepository.findByDate(date);
@@ -41,6 +53,23 @@ public class DoctorSettingsController {
         }
         
         return ResponseEntity.ok(available);
+    }
+
+    @GetMapping("/all")
+    public ResponseEntity<DoctorSettings> getAllSettings() {
+        return ResponseEntity.ok(getSettings());
+    }
+
+    @PutMapping("/all")
+    public ResponseEntity<DoctorSettings> updateAllSettings(@RequestBody DoctorSettings request) {
+        DoctorSettings settings = getSettings();
+        if (request.getAvailableTimeSlots() != null) {
+            settings.setAvailableTimeSlots(request.getAvailableTimeSlots());
+        }
+        if (request.getLocationSlots() != null) {
+            settings.setLocationSlots(request.getLocationSlots());
+        }
+        return ResponseEntity.ok(doctorSettingsRepository.save(settings));
     }
 
     @PutMapping("/slots")
