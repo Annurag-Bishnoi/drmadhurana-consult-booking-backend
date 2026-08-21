@@ -24,6 +24,8 @@ public class User {
 
     private String picture;
 
+    private String phoneNumber;
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private UserRole role = UserRole.PATIENT;
@@ -73,6 +75,9 @@ public class User {
 
     public String getPicture() { return picture; }
     public void setPicture(String picture) { this.picture = picture; }
+
+    public String getPhoneNumber() { return phoneNumber; }
+    public void setPhoneNumber(String phoneNumber) { this.phoneNumber = phoneNumber; }
 
     public UserRole getRole() { return role; }
     public void setRole(UserRole role) { this.role = role; }

@@ -19,11 +19,13 @@ public class AppointmentService {
     private final AppointmentRepository appointmentRepository;
     private final UserRepository userRepository;
     private final DailyVideoService dailyVideoService;
+    private final TwilioService twilioService;
 
-    public AppointmentService(AppointmentRepository appointmentRepository, UserRepository userRepository, DailyVideoService dailyVideoService) {
+    public AppointmentService(AppointmentRepository appointmentRepository, UserRepository userRepository, DailyVideoService dailyVideoService, TwilioService twilioService) {
         this.appointmentRepository = appointmentRepository;
         this.userRepository = userRepository;
         this.dailyVideoService = dailyVideoService;
+        this.twilioService = twilioService;
     }
 
     public AppointmentResponse bookAppointment(Long patientId, BookAppointmentRequest request) {
@@ -62,7 +64,20 @@ public class AppointmentService {
                 request.getClinicLocation() != null ? request.getClinicLocation() : "Dehradun"
         );
 
+        if (request.getPhoneNumber() != null && !request.getPhoneNumber().isEmpty()) {
+            patient.setPhoneNumber(request.getPhoneNumber());
+            userRepository.save(patient);
+        }
+
         Appointment saved = appointmentRepository.save(appointment);
+        
+        // Send SMS Confirmation asynchronously
+        String phoneToSend = patient.getPhoneNumber();
+        if (phoneToSend != null && !phoneToSend.isEmpty()) {
+            String details = "Confirmed! Your " + type + " appointment with Dr. Madhu is booked for " + request.getDate() + " at " + request.getTime() + ".";
+            new Thread(() -> twilioService.sendBookingConfirmation(phoneToSend, details)).start();
+        }
+
         return new AppointmentResponse(saved);
     }
 

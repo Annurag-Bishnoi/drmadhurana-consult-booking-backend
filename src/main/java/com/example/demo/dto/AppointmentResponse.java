@@ -20,6 +20,7 @@ public class AppointmentResponse {
     private String notes;
     private String prescription;
     private String clinicLocation;
+    private String phoneNumber;
 
     public AppointmentResponse() {}
 
@@ -41,6 +42,7 @@ public class AppointmentResponse {
         this.notes = appointment.getNotes();
         this.prescription = appointment.getPrescription();
         this.clinicLocation = appointment.getClinicLocation();
+        this.phoneNumber = appointment.getPatient().getPhoneNumber();
     }
 
     public Long getId() { return id; }
@@ -66,4 +68,6 @@ public class AppointmentResponse {
     public void setNotes(String notes) { this.notes = notes; }
     public String getPrescription() { return prescription; }
     public void setPrescription(String prescription) { this.prescription = prescription; }
+    public String getPhoneNumber() { return phoneNumber; }
+    public void setPhoneNumber(String phoneNumber) { this.phoneNumber = phoneNumber; }
 }
