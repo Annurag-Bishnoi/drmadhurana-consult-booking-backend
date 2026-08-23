@@ -74,12 +74,12 @@ public class AppointmentService {
         // Send SMS Confirmation asynchronously
         String phoneToSend = patient.getPhoneNumber();
         if (phoneToSend != null && !phoneToSend.isEmpty()) {
-            String details = "Your appointment is coming up on " + request.getDate() + " at " + request.getTime();
+            String details = "Reminder: Appt " + request.getDate() + ", " + request.getTime() + ". Reply C to confirm or R to reschedule. Test message from Twilio.";
             new Thread(() -> twilioService.sendBookingConfirmation(phoneToSend, details)).start();
         }
 
         // Send Doctor Notification asynchronously
-        String doctorDetails = "Your appointment is coming up on " + request.getDate() + " at " + request.getTime();
+        String doctorDetails = "Reminder: Appt " + request.getDate() + ", " + request.getTime() + ". Reply C to confirm or R to reschedule. Test message from Twilio.";
         new Thread(() -> twilioService.sendDoctorNotification(doctorDetails)).start();
 
         return new AppointmentResponse(saved);

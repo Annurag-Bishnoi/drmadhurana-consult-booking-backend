@@ -66,20 +66,21 @@ public class TwilioService {
         }
     }
 
-    public void sendWhatsAppReminder(String toPhone, String meetingUrl) {
+    public void sendSmsReminder(String toPhone, String date, String time) {
         if (toPhone == null || toPhone.isEmpty()) return;
         
-        String formattedPhone = "whatsapp:" + formatPhone(toPhone);
+        String formattedPhone = formatPhone(toPhone);
+        String details = "Reminder: Appt " + date + ", " + time + ". Reply C to confirm or R to reschedule. Test message from Twilio.";
         
         try {
             Message.creator(
                 new PhoneNumber(formattedPhone),
-                new PhoneNumber(twilioWhatsappNumber),
-                "Your appointment is coming up on today at " + meetingUrl
+                new PhoneNumber(twilioPhoneNumber),
+                details
             ).create();
-            System.out.println("WhatsApp message sent successfully to " + formattedPhone);
+            System.out.println("Reminder SMS sent successfully to " + formattedPhone);
         } catch (Exception e) {
-            System.err.println("Failed to send WhatsApp message to " + formattedPhone + ": " + e.getMessage());
+            System.err.println("Failed to send Reminder SMS to " + formattedPhone + ": " + e.getMessage());
         }
     }
     

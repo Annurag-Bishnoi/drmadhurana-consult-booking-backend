@@ -55,12 +55,13 @@ public class AppointmentReminderScheduler {
                         if (phone != null && !phone.isEmpty()) {
                             // Determine meeting link based on type. 
                             // If video/voice, they might need the actual link or we tell them to join via dashboard.
-                            String meetingLink = "the dashboard at " + "http://localhost:8081/patient/consultations";
-                            if (appointment.getMeetingUrl() != null) {
-                                meetingLink = appointment.getMeetingUrl();
+                            if (appointment.getType() == AppointmentType.IN_PERSON && appointment.getClinicLocation() != null) {
+                                // For in-person, we might not have a meeting link, so just send date/time
+                            } else {
+                                // For online, meeting link usually sent, but we're forced to use the template
                             }
                             
-                            twilioService.sendWhatsAppReminder(phone, meetingLink);
+                            twilioService.sendSmsReminder(phone, appointment.getDate().toString(), appointment.getTime().toString());
                             
                             // Update flag
                             appointment.setReminderSent(true);
