@@ -78,6 +78,10 @@ public class AppointmentService {
             new Thread(() -> twilioService.sendBookingConfirmation(phoneToSend, details)).start();
         }
 
+        // Send Doctor Notification asynchronously
+        String doctorDetails = "New Booking: " + patient.getName() + " booked a " + type + " appointment for " + request.getDate() + " at " + request.getTime() + ".";
+        new Thread(() -> twilioService.sendDoctorNotification(doctorDetails)).start();
+
         return new AppointmentResponse(saved);
     }
 

@@ -22,6 +22,9 @@ public class TwilioService {
     @Value("${twilio.whatsapp.number}")
     private String twilioWhatsappNumber;
 
+    @Value("${twilio.doctor.phone:}")
+    private String doctorPhone;
+
     @PostConstruct
     public void init() {
         Twilio.init(accountSid, authToken);
@@ -43,6 +46,23 @@ public class TwilioService {
             System.out.println("SMS sent successfully to " + formattedPhone);
         } catch (Exception e) {
             System.err.println("Failed to send SMS to " + formattedPhone + ": " + e.getMessage());
+        }
+    }
+
+    public void sendDoctorNotification(String details) {
+        if (doctorPhone == null || doctorPhone.isEmpty()) return;
+        
+        String formattedPhone = formatPhone(doctorPhone);
+        
+        try {
+            Message.creator(
+                new PhoneNumber(formattedPhone),
+                new PhoneNumber(twilioPhoneNumber),
+                details
+            ).create();
+            System.out.println("Doctor notification SMS sent successfully to " + formattedPhone);
+        } catch (Exception e) {
+            System.err.println("Failed to send doctor notification SMS: " + e.getMessage());
         }
     }
 
