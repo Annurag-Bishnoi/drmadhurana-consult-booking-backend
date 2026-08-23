@@ -74,12 +74,12 @@ public class AppointmentService {
         // Send SMS Confirmation asynchronously
         String phoneToSend = patient.getPhoneNumber();
         if (phoneToSend != null && !phoneToSend.isEmpty()) {
-            String details = "Confirmed! Your " + type + " appointment with Dr. Madhu is booked for " + request.getDate() + " at " + request.getTime() + ".";
+            String details = "Your appointment is coming up on " + request.getDate() + " at " + request.getTime();
             new Thread(() -> twilioService.sendBookingConfirmation(phoneToSend, details)).start();
         }
 
         // Send Doctor Notification asynchronously
-        String doctorDetails = "New Booking: " + patient.getName() + " booked a " + type + " appointment for " + request.getDate() + " at " + request.getTime() + ".";
+        String doctorDetails = "Your appointment is coming up on " + request.getDate() + " at " + request.getTime();
         new Thread(() -> twilioService.sendDoctorNotification(doctorDetails)).start();
 
         return new AppointmentResponse(saved);

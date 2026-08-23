@@ -75,7 +75,7 @@ public class TwilioService {
             Message.creator(
                 new PhoneNumber(formattedPhone),
                 new PhoneNumber(twilioWhatsappNumber),
-                "Reminder: Your consultation with Dr. Madhu is starting soon. Join here: " + meetingUrl
+                "Your appointment is coming up on today at " + meetingUrl
             ).create();
             System.out.println("WhatsApp message sent successfully to " + formattedPhone);
         } catch (Exception e) {
